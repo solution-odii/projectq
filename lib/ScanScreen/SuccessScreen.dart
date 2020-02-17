@@ -1,13 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:projectq_app/Backend/JoinQueueBackend.dart';
 import 'package:projectq_app/Constants/AppColors.dart';
 import 'package:projectq_app/Constants/AssetStrings.dart';
 import 'package:projectq_app/Constants/Strings.dart';
 import 'package:projectq_app/Utils/Styles.dart';
 
-class SuccessScreen extends StatelessWidget {
+class SuccessScreen extends StatefulWidget {
   final String uniqueID;
 
   SuccessScreen(this.uniqueID);
+
+  @override
+  _SuccessScreenState createState() => _SuccessScreenState();
+}
+
+class _SuccessScreenState extends State<SuccessScreen> {
+  bool isLoading = false;
+
+  Future<void> _submit() async {
+
+
+
+      setState(() {
+        isLoading = true;
+      });
+
+      await JoinQueueBackend().joinQueueRequest(context, widget.uniqueID);
+
+
+      setState(() {
+        isLoading = false;
+      });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +65,7 @@ class SuccessScreen extends StatelessWidget {
 
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Text(uniqueID.toString().toUpperCase(), textAlign: TextAlign.center, style: textStyleBigBold,),
+              child: Text(widget.uniqueID.toString().toUpperCase(), textAlign: TextAlign.center, style: textStyleBigBold,),
             ),
 
             SizedBox(
@@ -59,6 +84,15 @@ class SuccessScreen extends StatelessWidget {
               height: 10,
             ),
 
+            isLoading
+                ? Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: CircularProgressIndicator(
+              backgroundColor: AppColors.color2,
+              valueColor: new AlwaysStoppedAnimation(AppColors.color1),
+            ),
+                )
+                :
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -68,7 +102,7 @@ class SuccessScreen extends StatelessWidget {
                   ),
                   color: AppColors.color4,
                   onPressed: (){
-
+                    _submit();
                   },
                   child: Text(yes, style: textStyleBigBoldWhite),),
 
