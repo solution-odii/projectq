@@ -40,7 +40,6 @@ class JoinQueueBackend {
       resp = jsonDecode(response.body);
       ResponseData.responseModel = ResponseModel.fromJson(resp);
 
-
       if(equalsIgnoreCase("200", ResponseData.responseModel.status.toString())){
         ResponseData.joinQueueResponse = JoinQueueModel.fromJson(ResponseData.responseModel.data);
         successAlertDialog(context, ResponseData.responseModel.message);
